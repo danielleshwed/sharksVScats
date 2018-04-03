@@ -80,6 +80,7 @@ class Dashboard extends Component {
   handleToggle(e, toggled){
     this.setState({
       [e.target.name]: toggled,
+      loading: true
     }, () => {
       this.getPicture();
     });
@@ -142,7 +143,6 @@ class Dashboard extends Component {
     fetch(url)
       .then(data => {
         this.setState({
-          loading: true,
           showPictures: true,
         })
         return data.json();
@@ -196,8 +196,6 @@ class Dashboard extends Component {
               keyboard_arrow_right
             </i>
           </div>) : null }
-
-
       </div>
     );
   }

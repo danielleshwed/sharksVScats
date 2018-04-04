@@ -20,7 +20,6 @@ const style = {
 class Picture extends Component {
   constructor(props){
     super(props);
-
     this.state = {
       imgurl: ''
     }
@@ -31,25 +30,19 @@ class Picture extends Component {
       imgurl: nextProps.imgurl
     })
   }
-  render() {
-    if(this.state.imgurl !== undefined){
-      return (
-        <div >
-        <Paper style={style.paper} zDepth={4}>
-          <img style= {style.img} src={this.state.imgurl} />
-        </Paper>
-        </div>
-      );
-    } else{
-      return (
-        <div >
-        <Paper zDepth={4}>
-          <h1 style={{padding:'20px'}}>No Pictures to Show</h1>
-        </Paper>
-        </div>
-      )
-    }
 
+  render() {
+      console.log(this.state)
+      return (
+        <div>
+          <Paper style={style.paper} zDepth={4}>
+            { this.props.imgurl
+                ? <img style= {style.img} src={this.props.imgurl} />
+                : <h1 style={{padding:'20px'}}>No Pictures to Show</h1>
+            }
+          </Paper>
+        </div>
+    );
   }
 }
 

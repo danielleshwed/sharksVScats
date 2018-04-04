@@ -4,6 +4,9 @@ import Toggle from 'material-ui/Toggle';
 import Paper from 'material-ui/Paper';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 
+import { connect } from 'react-redux';
+import { handleToggle, fetchPictures } from './actions';
+
 const style = {
   paper: {
     height: '100%',
@@ -24,20 +27,10 @@ const style = {
 }
 
 class SharkCatToggle extends Component {
-
   constructor(props) {
     super(props);
-    this.state = {
-      cat: false,
-      shark: false,
-      loading: false,
-      img: '',
-      imgPos: 0,
-      showPictures: false,
-      pictureList: []
-    }
-    this.getPicture = this.getPicture.bind(this);
-    this.handleToggle = this.handleToggle.bind(this);
+
+    this.showLoading = this.showLoading.bind(this);
   }
 
   /**
@@ -55,62 +48,22 @@ class SharkCatToggle extends Component {
     )
   }
 
-  /**
-  Set this.state.cats or this.state.sharks equal to true or false based on toggle
-  **/
-  handleToggle(e, toggled) {
-    this.setState({
-      [e.target.name]: toggled,
-      loading: true
-    }, () => {
-      this.getPicture();
-    });
-  }
-
-  /**
-  Get pictureList from our endpoint and set result in our state
-  Show loading state when api is fetching data
-  **/
-  getPicture() {
-    const url = `http://localhost:8080/?shark=${this.state.shark}&cat=${this.state.cat}&imgPos=${this.state.imgPos}`;
-    fetch(url)
-      .then(data => {
-        this.setState({
-          showPictures: true,
-          loading: true
-        })
-        return data.json();
-      }).then(results => {
-        this.setState({
-          loading: false,
-          pictureList: results.picture,
-          img:  results.picture[0],
-          imgPos: 0
-        }, () => {
-          this.props.getChildData(this.state)
-        });
-      })
-      .catch(e => {
-        this.setState({
-          loading: false
-        });
-      })
-  }
-
   render() {
+    const { handleToggle, fetchPictures, cat, shark } = this.props;
+
     return (
       <div style={style.buttonContainer}>
-        {this.state.loading ? this.showLoading() : ''}
+        {this.props.loading ? this.showLoading() : ''}
           <Paper style={style.paper} zDepth={4}>
             <Toggle
              name="shark"
              label="Sharks"
-             onToggle={this.handleToggle}
+             onToggle={(e, toggled) => handleToggle(e, toggled, cat, shark)}
              defaultToggled={false}/>
              <Toggle
               name="cat"
               label="Cats"
-              onToggle={this.handleToggle}
+              onToggle={(e, toggled) => handleToggle(e, toggled, cat, shark)}
               defaultToggled={false}/>
           </Paper>
       </div>
@@ -118,4 +71,21 @@ class SharkCatToggle extends Component {
   }
 }
 
-export default SharkCatToggle;
+export function mapDispatchToProps(dispatch) {
+  return {
+    handleToggle: (e, toggled, cat, shark) => dispatch(handleToggle(e, toggled, cat, shark))
+  }
+}
+
+function mapStateToProps(state) {
+  return {
+    loading: state.toggleReducer.loading,
+    cat: state.toggleReducer.cat,
+    shark: state.toggleReducer.shark,
+    img: state.toggleReducer.img,
+    imgPos: state.toggleReducer.imgPos,
+    pictureList: state.toggleReducer.pictureList
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SharkCatToggle);

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 
 const style = {
@@ -19,25 +19,15 @@ const style = {
 class Picture extends Component {
   constructor(props){
     super(props);
-    this.state = {
-      imgurl: ''
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      imgurl: nextProps.imgurl
-    })
   }
 
   render() {
-      console.log(this.state)
       return (
         <div>
           <Paper style={style.paper} zDepth={4}>
             { this.props.imgurl
                 ? <img style= {style.img} src={this.props.imgurl} />
-                : <h1 style={{padding:'20px'}}>No Pictures to Show</h1>
+                : <h1 style={{padding: '20px'}}>No Pictures to Show</h1>
             }
           </Paper>
         </div>

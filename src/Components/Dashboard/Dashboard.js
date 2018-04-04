@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 
 import Picture from '../Picture/Picture';
 import SharkCatToggle from '../SharkCatToggle/SharkCatToggle';
+import { connect } from 'react-redux';
+
+import { handleClick } from './actions';
 
 const style = {
   inline: {
@@ -18,90 +21,35 @@ const style = {
 }
 
 class Dashboard extends Component {
-  constructor(){
-    super();
-
-    /**
-    cat and shark: true or false based on whether cat and shark are toggled on or off
-    Loading: whether to display a loading icon or not
-    img: the img url of the picture
-    imgPos: corresponds to array index so user is able to click next or back button to display
-    the last image seen.
-    showPictures: whether to display pictures or not
-    pictureList: current picture list of cats/sharks or both
-    **/
-    this.state = {
-      cat: false,
-      shark: false,
-      loading: false,
-      img: '',
-      imgPos: 0,
-      showPictures: false,
-      pictureList: [],
-      update: false
-    }
-    this.handleButtonClick = this.handleButtonClick.bind(this);
-    this.getChildData = this.getChildData.bind(this);
+  constructor(props) {
+    super(props);
   }
 
   componentDidMount() {
     document.body.style = 'background: #2196F3;'
   }
 
-  getChildData(data) {
-     this.setState({
-       cat: data.cat,
-       shark: data.shark,
-       loading: data.loading,
-       img: data.img,
-       imgPos: data.imgPos,
-       pictureList: data.pictureList,
-       showPictures: data.showPictures,
-       update: true
-     });
-   }
-
-  /**
-  If sharks/cats is true ie length of list is > 10, then grab a random image
-  else if the back button was clicked, decrease imagePosition to get last image seen
-  else the next button was clicked so get next image in our image array
-  **/
-  handleButtonClick(e, val) {
-    let pos;
-    if(this.state.pictureList.length > 10){
-      pos = Math.floor(Math.random()*this.state.pictureList.length);
-    } else if(e === "back") {
-      pos = (this.state.imgPos - 1 + this.state.pictureList.length ) % (this.state.pictureList.length);
-    } else {
-      pos = this.state.imgPos % (this.state.pictureList.length-1);
-      pos++;
-    }
-    this.setState({
-      imgPos: pos,
-      img: this.state.pictureList[pos]
-    });
-  }
-
   render() {
-    console.log(this.state)
+    const { pictureList, imgPos } = this.props;
+
     return (
       <div>
-        <SharkCatToggle getChildData={this.getChildData} />
-        { this.state.showPictures ?
+        <SharkCatToggle />
+        { this.props.showPictures ?
             <div style={style.inline}>
                 <i
                   className="material-icons"
                   value="back"
-                  onClick={this.handleButtonClick.bind(this, "back")}
+                  onClick={() => this.props.handleClick("back", this.props.pictureList, this.props.imgPos)}
                   style = {style.nextButton}
                 >
-                keyboard_arrow_left
+                  keyboard_arrow_left
                 </i>
-                  <Picture imgurl={this.state.img} />
+                  <Picture imgurl={this.props.img} />
                 <i
                   className="material-icons"
                   value="next"
-                  onClick = {this.handleButtonClick.bind(this, "next")}
+                  onClick = {() => this.props.handleClick("next", this.props.pictureList, this.props.imgPos)}
                   style = {style.nextButton}
                 >
                   keyboard_arrow_right
@@ -113,4 +61,22 @@ class Dashboard extends Component {
   }
 }
 
-export default Dashboard;
+export function mapDispatchToProps(dispatch) {
+  return {
+    handleClick: (e, list, pos) => dispatch(handleClick(e, list, pos))
+  }
+}
+
+export function mapStateToProps(state) {
+  return {
+    loading: state.toggleReducer.loading,
+    cat: state.toggleReducer.cat,
+    shark: state.dashboardReducer.shark,
+    img: state.dashboardReducer.img,
+    imgPos: state.dashboardReducer.imgPos,
+    pictureList: state.toggleReducer.pictureList,
+    showPictures: state.toggleReducer.showPictures
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

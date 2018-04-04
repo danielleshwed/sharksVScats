@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 
-import Dashboard from '../Dashboard/Dashboard';
 import Toggle from 'material-ui/Toggle';
 import Paper from 'material-ui/Paper';
-
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 
 const style = {
@@ -18,11 +16,16 @@ const style = {
   buttonContainer: {
     textAlign: 'center'
   },
+  container: {
+    position: 'fixed',
+    top: '50%',
+    left: '50%'
+  },
 }
 
 class SharkCatToggle extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       cat: false,
@@ -40,7 +43,7 @@ class SharkCatToggle extends Component {
   /**
   Show loading state when api is fetching photo list
   **/
-  showLoading(){
+  showLoading() {
     return(
       <div style={style.container}>
         <RefreshIndicator
@@ -55,7 +58,7 @@ class SharkCatToggle extends Component {
   /**
   Set this.state.cats or this.state.sharks equal to true or false based on toggle
   **/
-  handleToggle(e, toggled){
+  handleToggle(e, toggled) {
     this.setState({
       [e.target.name]: toggled,
       loading: true
@@ -68,8 +71,8 @@ class SharkCatToggle extends Component {
   Get pictureList from our endpoint and set result in our state
   Show loading state when api is fetching data
   **/
-  getPicture(){
-    var url = `http://localhost:8080/?shark=${this.state.shark}&cat=${this.state.cat}&imgPos=${this.state.imgPos}`;
+  getPicture() {
+    const url = `http://localhost:8080/?shark=${this.state.shark}&cat=${this.state.cat}&imgPos=${this.state.imgPos}`;
     fetch(url)
       .then(data => {
         this.setState({
@@ -97,18 +100,19 @@ class SharkCatToggle extends Component {
   render() {
     return (
       <div style={style.buttonContainer}>
-        <Paper style={style.paper} zDepth={4}>
-          <Toggle
-           name="shark"
-           label="Sharks"
-           onToggle={this.handleToggle}
-           defaultToggled={false}/>
-           <Toggle
-            name="cat"
-            label="Cats"
-            onToggle={this.handleToggle}
-            defaultToggled={false}/>
-        </Paper>
+        {this.state.loading ? this.showLoading() : ''}
+          <Paper style={style.paper} zDepth={4}>
+            <Toggle
+             name="shark"
+             label="Sharks"
+             onToggle={this.handleToggle}
+             defaultToggled={false}/>
+             <Toggle
+              name="cat"
+              label="Cats"
+              onToggle={this.handleToggle}
+              defaultToggled={false}/>
+          </Paper>
       </div>
     );
   }

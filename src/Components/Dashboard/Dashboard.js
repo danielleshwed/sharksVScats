@@ -1,18 +1,9 @@
 import React, { Component } from 'react';
 
-import RaisedButton from 'material-ui/RaisedButton';
 import Picture from '../Picture/Picture';
-
-import Toggle from 'material-ui/Toggle';
-import Paper from 'material-ui/Paper';
 import SharkCatToggle from '../SharkCatToggle/SharkCatToggle';
 
 const style = {
-  loading: {
-    display: 'flex',
-    textAlign: 'center',
-    margin: '0 auto',
-  },
   inline: {
     display: 'flex',
     marginTop: '20px',
@@ -24,17 +15,12 @@ const style = {
     fontSize: '60px',
     color: 'white',
   },
-  container: {
-    position: 'fixed',
-    top: '50%',
-    left: '50%'
-  },
 }
 
 class Dashboard extends Component {
   constructor(){
     super();
-    
+
     /**
     cat and shark: true or false based on whether cat and shark are toggled on or off
     Loading: whether to display a loading icon or not
@@ -58,7 +44,7 @@ class Dashboard extends Component {
     this.getChildData = this.getChildData.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     document.body.style = 'background: #2196F3;'
   }
 
@@ -80,12 +66,11 @@ class Dashboard extends Component {
   else if the back button was clicked, decrease imagePosition to get last image seen
   else the next button was clicked so get next image in our image array
   **/
-  handleButtonClick(e, val){
+  handleButtonClick(e, val) {
     let pos;
     if(this.state.pictureList.length > 10){
       pos = Math.floor(Math.random()*this.state.pictureList.length);
-    }
-    else if(e == "back"){
+    } else if(e === "back") {
       pos = (this.state.imgPos - 1 + this.state.pictureList.length ) % (this.state.pictureList.length);
     } else {
       pos = this.state.imgPos % (this.state.pictureList.length-1);
@@ -101,7 +86,6 @@ class Dashboard extends Component {
     console.log(this.state)
     return (
       <div>
-        {this.state.loading ? this.showLoading() : ''}
         <SharkCatToggle getChildData={this.getChildData} />
         { this.state.showPictures ?
             <div style={style.inline}>

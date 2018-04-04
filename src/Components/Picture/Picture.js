@@ -5,8 +5,7 @@ import Paper from 'material-ui/Paper';
 const style = {
   paper: {
     height: '100%',
-    width: '50%',
-    margin: 20,
+    width: '640px',
     textAlign: 'center',
     margin: '0 auto',
   },
@@ -25,7 +24,7 @@ class Picture extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps){
+  componentWillReceiveProps(nextProps) {
     this.setState({
       imgurl: nextProps.imgurl
     })

@@ -21,17 +21,12 @@ const style = {
 }
 
 class Dashboard extends Component {
-  constructor(props) {
-    super(props);
-  }
 
   componentDidMount() {
     document.body.style = 'background: #2196F3;'
   }
 
   render() {
-    const { pictureList, imgPos } = this.props;
-
     return (
       <div>
         <SharkCatToggle />

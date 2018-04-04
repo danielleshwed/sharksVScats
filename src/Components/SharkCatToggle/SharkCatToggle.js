@@ -5,7 +5,7 @@ import Paper from 'material-ui/Paper';
 import RefreshIndicator from 'material-ui/RefreshIndicator';
 
 import { connect } from 'react-redux';
-import { handleToggle, fetchPictures } from './actions';
+import { handleToggle } from './actions';
 
 const style = {
   paper: {
@@ -49,7 +49,7 @@ class SharkCatToggle extends Component {
   }
 
   render() {
-    const { handleToggle, fetchPictures, cat, shark } = this.props;
+    const { handleToggle, cat, shark } = this.props;
 
     return (
       <div style={style.buttonContainer}>

@@ -37,7 +37,7 @@ export function requestPicturesSuccess(pictureList, img){
 API call to custom end point to grab picture list based on whether shark/ cat or both is toggled
 ***/
 export function fetchPictures(name, toggled, cat, shark, dispatch) {
-  if(name == 'shark') {
+  if(name === 'shark') {
     shark = toggled;
   } else {
     cat = toggled

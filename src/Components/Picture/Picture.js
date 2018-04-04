@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import Paper from 'material-ui/Paper';
 
 const style = {
@@ -17,16 +16,13 @@ const style = {
 };
 
 class Picture extends Component {
-  constructor(props){
-    super(props);
-  }
 
   render() {
       return (
         <div>
           <Paper style={style.paper} zDepth={4}>
             { this.props.imgurl
-                ? <img style= {style.img} src={this.props.imgurl} />
+                ? <img style= {style.img} src={this.props.imgurl} alt=''/>
                 : <h1 style={{padding: '20px'}}>No Pictures to Show</h1>
             }
           </Paper>
